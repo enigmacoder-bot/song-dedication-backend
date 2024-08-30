@@ -507,8 +507,8 @@ app.post('/resetPassword',(req,res)=>{
   })
 })
   
-
+const HOST = '0.0.0.0';
 // Start Server
-server.listen(PORT, () => {
+server.listen(PORT,HOST, () => {
   console.log(`Server is running on port ${PORT}`);
 });
