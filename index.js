@@ -40,8 +40,8 @@ const io = new socketIo.Server(server, {
       credentials: true
     }
   });
-
-const PORT = process.env.PORT || 5000;
+const PORT='https://song-dedication-backend.onrender.com';
+//const PORT = process.env.PORT || 5000;
 
 // MongoDB Connection
 mongoose.connect('mongodb+srv://sumanth:Hello123@cluster0.aq1npql.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
