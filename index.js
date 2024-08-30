@@ -34,7 +34,7 @@ const successSVG=`<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org
 
 const io = new socketIo.Server(server, {
     cors: {
-      origin: "http://localhost:3000", // Change this to your frontend URL
+      origin: "https://song-dedication.netlify.app", // Change this to your frontend URL
       methods: ["GET", "POST"],
       allowedHeaders: ["my-custom-header"],
       credentials: true
@@ -106,7 +106,7 @@ transporter.verify((error,success)=>{
 
 const sendVerificationMail = async ({ _id, email }, res) => {
   try {
-    const currentURL = 'http://localhost:5000/';
+    const currentURL = 'https://song-dedication-backend.onrender.com/';
     const uniqueString = uuidv4() + _id;
 
     // Hash the unique string
