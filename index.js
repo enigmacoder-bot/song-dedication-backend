@@ -9,7 +9,6 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
@@ -58,6 +57,12 @@ const userSchema = new mongoose.Schema({
   verified: Boolean,
 });
 
+const adminSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String, // hashed password
+});
+
 const userVerificationSchema = new mongoose.Schema({
   userId: String,
   uniqueString: String,
@@ -73,6 +78,7 @@ const resetPasswordSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
+const Admin=mongoose.model("Admin",adminSchema);
 const SongRequest = mongoose.model("SongRequest", songRequestSchema);
 const UserVerification = mongoose.model(
   "UserVerification",
@@ -150,10 +156,11 @@ io.use((socket, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "your-secret-key");
+    const decoded = jwt.verify(token, "Song Dedication 222");
     socket.user = decoded; // Attach the decoded user information to the socket instance
     next();
   } catch (error) {
+    console.log("Token error",error);
     return next(new Error("Authentication error"));
   }
 });
@@ -272,6 +279,36 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
+// Admin login endpoint
+app.post("/adminLogin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log('Email',email);
+    console.log('Password',password);
+    // Find user by email
+    const admin = await Admin.findOne({ email });
+    console.log('Admin',admin);
+    if (!admin) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    // Compare passwords
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    // Generate JWT token
+    const token = createToken(admin._id);
+
+    // Return the token in the response
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 app.get("/verify/:userId/:uniqueString", (req, res) => {
   let { userId, uniqueString } = req.params;
