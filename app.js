@@ -21,7 +21,7 @@ const successSVG = `<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.o
 
 const io = new socketIo.Server(server, {
   cors: {
-    origin: "https://song-dedication.netlify.app", // Change this to your frontend URL
+    origin: "*", // Change this to your frontend URL
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true,
@@ -127,7 +127,7 @@ const sendVerificationMail = async ({ _id, email }, res) => {
       subject: "Verify Your Email",
       html: `<p>Verify your email address to complete the signup and log in to your account.</p>
              <p>This link expires in 5 hours.</p>
-             <p>Click <a href="${currentURL}/api/verify/${_id}/${uniqueString}">here</a> to proceed.</p>`,
+             <p>Click <a href="${currentURL}/verify/${_id}/${uniqueString}">here</a> to proceed.</p>`,
     };
 
     // Send the verification email
@@ -213,7 +213,7 @@ const createToken = (_id) => {
 };
 
 // Signup Route
-app.post("/api/signup", async (req, res) => {
+app.post("/signup", async (req, res) => {
   console.log(req.body);
   try {
     const { username, email, password } = req.body;
@@ -253,7 +253,7 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-app.post("/api/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     // Find user by email
@@ -281,7 +281,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Admin login endpoint
-app.post("/api/adminLogin", async (req, res) => {
+app.post("/adminLogin", async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("Email", email);
@@ -308,7 +308,7 @@ app.post("/api/adminLogin", async (req, res) => {
   }
 });
 
-app.get("/api/verify/:userId/:uniqueString", (req, res) => {
+app.get("/verify/:userId/:uniqueString", (req, res) => {
   let { userId, uniqueString } = req.params;
   console.log("Verification Link ");
   UserVerification.find({ userId })
@@ -410,7 +410,7 @@ app.get("/api/verify/:userId/:uniqueString", (req, res) => {
 
 //Reset Password
 
-app.post("/api/requestResetpassword", (req, res) => {
+app.post("/requestResetpassword", (req, res) => {
   const { email, redirectUrl } = req.body;
   User.find({ email })
     .then((data) => {
@@ -493,7 +493,7 @@ const sendPasswordResetEmail = ({ _id, email }, redirectUrl, res) => {
     });
 };
 
-app.post("/api/resetPassword", (req, res) => {
+app.post("/resetPassword", (req, res) => {
   let { userId, resetString, newPassword } = req.body;
 
   ResetPassword.find({ userId })
