@@ -21,7 +21,7 @@ const successSVG = `<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.o
 
 const io = new socketIo.Server(server, {
   cors: {
-    origin: "*", // Change this to your frontend URL
+    origin: "https://song-dedication.netlify.app", // Change this to your frontend URL
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true,
