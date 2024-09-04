@@ -476,7 +476,7 @@ const sendPasswordResetEmail = ({ _id, email }, redirectUrl, res) => {
         html: `<p>We received a request to reset the password for your account.</p>
               <p>This link will expire in 5 hours.</p>
               <p>Click <a href="${
-                redirectUrl + "/" + _id + "/" + resetString
+                redirectUrl + "/resetPassword/" + _id + "/" + resetString
               }">here</a> to reset your password.</p>
               <p>If you did not request a password reset, please ignore this email.</p>
 `,
